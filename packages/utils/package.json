@@ -1,0 +1,28 @@
+{
+  "name": "@bigscreen/utils",
+  "version": "1.0.0",
+  "description": "Utility functions for BigScreen Pro",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "dependencies": {
+    "@bigscreen/types": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

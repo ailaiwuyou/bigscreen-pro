@@ -1,0 +1,36 @@
+{
+  "name": "bigscreen-unified",
+  "version": "2.0.0",
+  "description": "BigScreen Unified - Enterprise Data Visualization Platform",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=@bigscreen/web",
+    "dev:api": "turbo run dev --filter=@bigscreen/api",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,vue,json,md}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:migrate": "cd services/api && npx prisma migrate dev",
+    "db:generate": "cd services/api && npx prisma generate",
+    "db:studio": "cd services/api && npx prisma studio"
+  },
+  "devDependencies": {
+    "@turbo/gen": "^1.12.4",
+    "turbo": "^1.12.4",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}

@@ -1,0 +1,29 @@
+/"use client"
+
+/**
+ * BigScreen Pro Designer - 全局样式入口
+ */
+
+// 导入Tailwind
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// 导入变量
+@import './variables.scss';
+
+// 导入基础样式
+@import './base.scss';
+
+// 导入组件样式
+@import './components.scss';
+
+// 导入工具类
+@import './utilities.scss';
+
+// 导入动画
+@import './animations.scss';
+
+// 导入主题
+@import './themes/light.scss';
+@import './themes/dark.scss';

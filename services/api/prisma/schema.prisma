@@ -1,0 +1,408 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 用户与用户权限相关模型
+// ============================================
+
+/**
+ * 用户表 - 系统的核心用户实体
+ */
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  username    String    @unique
+  password    String    // bcrypt加密后的密码
+  displayName String?   @map("display_name")
+  avatar      String?   // 头像URL
+  phone       String?
+  status      UserStatus @default(ACTIVE)
+  
+  // 外键关联
+  roleId      String?   @map("role_id")
+  role        Role?     @relation(fields: [roleId], references: [id])
+  
+  // 关联数据
+  dashboards  Dashboard[]
+  datasources Datasource[]
+  shares      Share[]
+  operationLogs OperationLog[]
+  refreshTokens RefreshToken[]
+  
+  // 时间戳
+  lastLoginAt DateTime? @map("last_login_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  @@index([email])
+  @@index([status])
+  @@index([roleId])
+  @@map("users")
+}
+
+enum UserStatus {
+  ACTIVE    // 正常
+  INACTIVE  // 未激活
+  SUSPENDED // 暂停
+  DELETED   // 已删除
+}
+
+/**
+ * 角色表 - RBAC角色定义
+ */
+model Role {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  permissions Json      // 权限列表 { resource: string; actions: string[] }[]
+  isSystem    Boolean   @default(false) @map("is_system")
+  
+  // 关联
+  users       User[]
+  
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  @@map("roles")
+}
+
+/**
+ * 刷新令牌表 - JWT刷新机制
+ */
+model RefreshToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  expiresAt DateTime  @map("expires_at")
+  
+  userId    String    @map("user_id")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime  @default(now()) @map("created_at")
+  
+  @@index([token])
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// ============================================
+// 仪表盘与组件相关模型
+// ============================================
+
+/**
+ * 仪表盘表 - 可视化大屏定义
+ */
+model Dashboard {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  
+  // 布局配置
+  config      Json      // { width: number; height: number; bgColor?: string; bgImage?: string }
+  
+  // 状态
+  status      DashboardStatus @default(DRAFT)
+  isPublic    Boolean   @default(false) @map("is_public")
+  
+  // 统计
+  viewCount   Int       @default(0) @map("view_count")
+  
+  // 外键
+  authorId    String    @map("author_id")
+  author      User      @relation(fields: [authorId], references: [id])
+  
+  themeId     String?   @map("theme_id")
+  theme       Theme?    @relation(fields: [themeId], references: [id])
+  
+  // 关联
+  components  Component[]
+  shares      Share[]
+  
+  // 时间戳
+  publishedAt DateTime? @map("published_at")
+  lastViewedAt DateTime? @map("last_viewed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  @@index([authorId])
+  @@index([status])
+  @@index([isPublic])
+  @@index([themeId])
+  @@map("dashboards")
+}
+
+enum DashboardStatus {
+  DRAFT     // 草稿
+  PUBLISHED // 已发布
+  ARCHIVED  // 已归档
+}
+
+/**
+ * 组件表 - 仪表盘中的可视化组件
+ */
+model Component {
+  id          String    @id @default(cuid())
+  name        String
+  type        ComponentType
+  
+  // 位置和尺寸
+  x           Float
+  y           Float
+  width       Float
+  height      Float
+  
+  // 配置
+  config      Json      // 组件特定配置 { dataSource?: string; style?: object; options?: object }
+  data        Json?     // 静态数据
+  
+  // 数据源关联
+  datasourceId String?  @map("datasource_id")
+  datasource  Datasource? @relation(fields: [datasourceId], references: [id])
+  
+  // 外键
+  dashboardId  String    @map("dashboard_id")
+  dashboard    Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  
+  // 排序
+  sortOrder   Int       @default(0) @map("sort_order")
+  
+  // 时间戳
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  @@index([dashboardId])
+  @@index([type])
+  @@index([datasourceId])
+  @@map("components")
+}
+
+enum ComponentType {
+  CHART_LINE      // 折线图
+  CHART_BAR       // 柱状图
+  CHART_PIE       // 饼图
+  CHART_SCATTER   // 散点图
+  CHART_RADAR     // 雷达图
+  CHART_FUNNEL    // 漏斗图
+  CHART_GAUGE     // 仪表盘图
+  CHART_HEATMAP   // 热力图
+  CHART_TREEMAP   // 矩形树图
+  CHART_SANKEY    // 桑基图
+  CHART_GRAPH     // 关系图
+  TABLE           // 表格
+  STATISTIC       // 统计数字
+  TEXT            // 文本
+  IMAGE           // 图片
+  VIDEO           // 视频
+  IFRAME          // 内嵌页面
+  CUSTOM          // 自定义组件
+}
+
+// ============================================
+// 数据源相关模型
+// ============================================
+
+/**
+ * 数据源表 - 数据连接配置
+ */
+model Datasource {
+  id          String    @id @default(cuid())
+  name        String
+  type        DatasourceType
+  description String?
+  
+  // 连接配置
+  config      Json      // { host: string; port: number; database: string; username: string; password: string; ... }
+  
+  // 状态
+  status      DatasourceStatus @default(ACTIVE)
+  
+  // 缓存设置
+  cacheEnabled Boolean   @default(false) @map("cache_enabled")
+  cacheTTL    Int       @default(300) @map("cache_ttl") // 秒
+  
+  // 外键
+  ownerId     String    @map("owner_id")
+  owner       User      @relation(fields: [ownerId], references: [id])
+  
+  // 关联
+  components  Component[]
+  
+  // 时间戳
+  lastConnectedAt DateTime? @map("last_connected_at")
+  lastErrorAt   DateTime? @map("last_error_at")
+  lastErrorMsg  String?   @map("last_error_msg")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  
+  @@index([ownerId])
+  @@index([type])
+  @@index([status])
+  @@map("datasources")
+}
+
+enum DatasourceType {
+  MYSQL           // MySQL数据库
+  POSTGRESQL      // PostgreSQL数据库
+  MSSQL           // SQL Server数据库
+  ORACLE          // Oracle数据库
+  MONGODB         // MongoDB数据库
+  REDIS           // Redis缓存
+  ELASTICSEARCH   // Elasticsearch搜索引擎
+  REST_API        // REST API接口
+  GRAPHQL         // GraphQL接口
+  WEBSOCKET       // WebSocket实时数据
+  KAFKA           // Kafka消息队列
+  CSV             // CSV文件
+  EXCEL           // Excel文件
+  JSON            // JSON文件
+  CUSTOM          // 自定义数据源
+}
+
+enum DatasourceStatus {
+  ACTIVE      // 正常
+  INACTIVE    // 停用
+  ERROR       // 连接错误
+  CONNECTING  // 连接中
+}
+
+// ============================================
+// 主题与分享相关模型
+// ============================================
+
+/**
+ * 主题表 - 仪表盘主题样式
+ */
+model Theme {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  
+  // 主题配置
+  config      Json      // { colors: string[]; fonts: object; bgColor: string; bgImage: string; ... }
+  
+  // 分类
+  category    ThemeCategory @default(CUSTOM)
+  
+  // 系统预设
+  isSystem    Boolean   @default(false) @map("is_system")
+  
+  // 关联
+  dashboards  Dashboard[]
+  
+  // 时间戳
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  @@index([category])
+  @@index([isSystem])
+  @@map("themes")
+}
+
+enum ThemeCategory {
+  DARK      // 深色主题
+  LIGHT     // 浅色主题
+  TECH      // 科技风
+  BUSINESS  // 商务风
+  CUSTOM    // 自定义
+}
+
+/**
+ * 分享表 - 仪表盘分享配置
+ */
+model Share {
+  id          String    @id @default(cuid())
+  
+  // 分享类型
+  type        ShareType @default(PUBLIC_LINK)
+  
+  // 访问配置
+  config      Json      // { password?: string; expiresAt?: string; allowedIPs?: string[]; ... }
+  
+  // 访问统计
+  viewCount   Int       @default(0) @map("view_count")
+  
+  // 状态
+  status      ShareStatus @default(ACTIVE)
+  
+  // 外键
+  dashboardId String    @map("dashboard_id")
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  
+  creatorId   String    @map("creator_id")
+  creator     User      @relation(fields: [creatorId], references: [id])
+  
+  // 时间戳
+  expiresAt   DateTime? @map("expires_at")
+  lastViewedAt DateTime? @map("last_viewed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  @@index([dashboardId])
+  @@index([creatorId])
+  @@index([type])
+  @@index([status])
+  @@map("shares")
+}
+
+enum ShareType {
+  PUBLIC_LINK   // 公开链接
+  PRIVATE_LINK  // 私密链接
+  PASSWORD      // 密码保护
+  EMBED         // 嵌入代码
+}
+
+enum ShareStatus {
+  ACTIVE    // 有效
+  EXPIRED   // 已过期
+  DISABLED  // 已禁用
+  REVOKED   // 已撤销
+}
+
+// ============================================
+// 操作日志相关模型
+// ============================================
+
+/**
+ * 操作日志表 - 审计日志
+ */
+model OperationLog {
+  id          String    @id @default(cuid())
+  
+  // 操作信息
+  action      String    // 操作类型: CREATE, UPDATE, DELETE, LOGIN, LOGOUT, etc.
+  resource    String    // 资源类型: Dashboard, Component, User, etc.
+  resourceId  String?   @map("resource_id")
+  
+  // 详情
+  details     Json?     // 操作详情 { before?: object; after?: object; changes?: string[] }
+  
+  // 请求信息
+  ipAddress   String?   @map("ip_address")
+  userAgent   String?   @map("user_agent")
+  requestId   String?   @map("request_id")
+  
+  // 结果
+  success     Boolean   @default(true)
+  errorMsg    String?   @map("error_msg")
+  
+  // 外键
+  userId      String?   @map("user_id")
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // 时间戳
+  createdAt   DateTime  @default(now()) @map("created_at")
+  
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
+  @@map("operation_logs")
+}
