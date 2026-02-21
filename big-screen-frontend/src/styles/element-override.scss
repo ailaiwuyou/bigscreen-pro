@@ -1,0 +1,208 @@
+// Element Plus 样式覆盖
+
+// Button 样式覆盖
+.el-button {
+  &--primary {
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(64, 158, 255, 0.4);
+    }
+  }
+}
+
+// Input 样式覆盖
+.el-input {
+  &__inner {
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+    }
+  }
+}
+
+// Card 样式覆盖
+.el-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Table 样式覆盖
+.el-table {
+  th {
+    background-color: #f5f7fa;
+    font-weight: 600;
+  }
+
+  tr:hover > td {
+    background-color: #f5f7fa;
+  }
+}
+
+// Dialog 样式覆盖
+.el-dialog {
+  border-radius: 12px;
+  overflow: hidden;
+
+  &__header {
+    padding: 20px;
+    border-bottom: 1px solid #e4e7ed;
+  }
+
+  &__body {
+    padding: 20px;
+  }
+}
+
+// Menu 样式覆盖
+.el-menu {
+  border-right: none;
+
+  &--vertical {
+    .el-menu-item,
+    .el-sub-menu__title {
+      height: 48px;
+      line-height: 48px;
+    }
+  }
+}
+
+// Form 样式覆盖
+.el-form {
+  &--inline {
+    .el-form-item {
+      margin-right: 20px;
+    }
+  }
+}
+
+// Pagination 样式覆盖
+.el-pagination {
+  .btn-prev,
+  .btn-next {
+    border-radius: 4px;
+  }
+
+  .el-pager li {
+    border-radius: 4px;
+    min-width: 32px;
+    height: 32px;
+    line-height: 32px;
+  }
+}
+
+// Tag 样式覆盖
+.el-tag {
+  border-radius: 4px;
+  padding: 0 8px;
+  height: 24px;
+  line-height: 22px;
+}
+
+// Message 样式覆盖
+.el-message {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+// Notification 样式覆盖
+.el-notification {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+// Popover 样式覆盖
+.el-popover {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+// Tooltip 样式覆盖
+.el-tooltip__popper {
+  border-radius: 4px;
+}
+
+// Dropdown 样式覆盖
+.el-dropdown-menu {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+// Breadcrumb 样式覆盖
+.el-breadcrumb {
+  &__item {
+    &:last-child {
+      .el-breadcrumb__inner {
+        color: #606266;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+// Steps 样式覆盖
+.el-steps {
+  .el-step {
+    &__head {
+      &.is-success {
+        color: #67c23a;
+        border-color: #67c23a;
+      }
+      
+      &.is-error {
+        color: #f56c6c;
+        border-color: #f56c6c;
+      }
+      
+      &.is-finish {
+        color: #409eff;
+        border-color: #409eff;
+      }
+    }
+    
+    &__icon {
+      font-size: 14px;
+      width: 28px;
+      height: 28px;
+    }
+    
+    &__title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    &__description {
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
+}
+
+// Switch 样式覆盖
+.el-switch {
+  &__core {
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+    
+    &::after {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+  }
+  
+  &.is-checked {
+    .el-switch__core {
+      border-color: #409eff;
+      background-color: #409eff;
+      
+      &::after {
+        margin-left: -17px;
+      }
+    }
+  }
+}

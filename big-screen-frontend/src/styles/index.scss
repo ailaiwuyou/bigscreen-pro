@@ -1,0 +1,16 @@
+// 全局样式入口文件
+
+// 变量
+@import './variables.scss';
+
+// 重置样式
+@import './reset.scss';
+
+// 工具类
+@import './utils.scss';
+
+// Element Plus 主题覆盖
+@import './element-override.scss';
+
+// 全局动画
+@import './animations.scss';

@@ -1,0 +1,120 @@
+// Prisma schema 文件
+// 定义数据模型并生成 Prisma Client
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 用户表
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  password  String   // 加密后的密码
+  avatar    String?  // 头像URL
+  role      UserRole @default(USER) // 角色
+  status    UserStatus @default(ACTIVE) // 状态
+  
+  // 关联
+  dashboards  Dashboard[]
+  datasources DataSource[]
+  
+  // 时间戳
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLoginAt DateTime?
+  
+  @@index([email])
+  @@index([username])
+  @@index([status])
+  @@map("users")
+}
+
+// 仪表盘表
+model Dashboard {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  config      Json     // 仪表盘配置JSON
+  thumbnail   String?  // 缩略图URL
+  isPublic    Boolean  @default(false) // 是否公开
+  status      DashboardStatus @default(DRAFT) // 状态
+  
+  // 关联
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  // 时间戳
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([ownerId])
+  @@index([status])
+  @@index([isPublic])
+  @@map("dashboards")
+}
+
+// 数据源表
+model DataSource {
+  id          String   @id @default(uuid())
+  name        String
+  type        DataSourceType // 数据源类型
+  config      Json     // 数据源配置JSON（加密存储密码）
+  status      DataSourceStatus @default(ACTIVE) // 状态
+  lastTestedAt DateTime? // 上次测试连接时间
+
+  // 关联
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // 时间戳
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([ownerId])
+  @@index([type])
+  @@index([status])
+  @@map("data_sources")
+}
+
+// 枚举定义
+
+enum UserRole {
+  ADMIN    // 管理员
+  USER     // 普通用户
+  GUEST    // 访客
+}
+
+enum UserStatus {
+  ACTIVE    // 活跃
+  INACTIVE  // 未激活
+  SUSPENDED // 已暂停
+  DELETED   // 已删除
+}
+
+enum DashboardStatus {
+  DRAFT     // 草稿
+  PUBLISHED // 已发布
+  ARCHIVED  // 已归档
+}
+
+enum DataSourceType {
+  MYSQL      // MySQL
+  POSTGRESQL // PostgreSQL
+  REST_API   // REST API
+  JSON       // JSON 文件
+  EXCEL      // Excel 文件
+  CSV        // CSV 文件
+}
+
+enum DataSourceStatus {
+  ACTIVE    // 活跃
+  INACTIVE  // 未激活
+  ERROR     // 错误
+}
