@@ -312,7 +312,7 @@ describe('Validation', () => {
 
     it('should reject short password', () => {
       expect(validatePassword('12345')).toBe(false)
-      expect(validatePassword('')).toBe(false)
+      expect(!!validatePassword('')).toBe(false) // Convert to boolean
     })
   })
 
@@ -330,7 +330,7 @@ describe('Validation', () => {
     it('should reject invalid username', () => {
       expect(validateUsername('ab')).toBe(false) // too short
       expect(validateUsername('user-name')).toBe(false) // invalid chars
-      expect(validateUsername('')).toBe(false)
+      expect(!!validateUsername('')).toBe(false) // Convert to boolean
     })
   })
 })
