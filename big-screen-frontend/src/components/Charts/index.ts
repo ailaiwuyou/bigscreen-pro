@@ -1,6 +1,6 @@
 // BigScreen Pro 图表组件库
 // 
-// 提供 20+ 种常用图表组件，基于 ECharts 5 封装
+// 提供 25+ 种常用图表组件，基于 ECharts 5 封装
 // 
 // 使用示例:
 // import { BarChart, LineChart, PieChart } from '@/components/Charts'
@@ -28,6 +28,13 @@ export { default as GraphChart } from './GraphChart.vue'
 export { default as SankeyChart } from './SankeyChart.vue'
 export { default as BoxplotChart } from './BoxplotChart.vue'
 export { default as WordCloudChart } from './WordCloudChart.vue'
+
+// 增强图表 (P1 新增)
+export { default as TrendChart } from './TrendChart.vue'
+export { default as CanvasChart } from './CanvasChart.vue'
+export { default as CandlestickChart } from './CandlestickChart.vue'
+export { default as LiquidFillChart } from './LiquidFillChart.vue'
+export { default as MapChart } from './MapChart.vue'
 
 // 业务组件
 export { default as MetricCard } from './MetricCard.vue'

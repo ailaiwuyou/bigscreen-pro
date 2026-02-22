@@ -110,6 +110,227 @@
               <span class="item-desc">占比饼图</span>
             </div>
           </div>
+          
+          <!-- 趋势图 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'trend')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M3 20 L7 16 L11 18 L17 10 L21 14" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="M3 20 L21 20" stroke="currentColor" stroke-width="1" stroke-dasharray="4" fill="none"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">趋势图</span>
+              <span class="item-desc">带趋势线</span>
+            </div>
+          </div>
+          
+          <!-- 雷达图 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'radar')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <polygon points="12,6 18,9 18,15 12,18 6,15 6,9" fill="currentColor" opacity="0.5"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">雷达图</span>
+              <span class="item-desc">多维对比</span>
+            </div>
+          </div>
+          
+          <!-- 散点图 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'scatter')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <circle cx="6" cy="18" r="2" fill="currentColor"/>
+                <circle cx="10" cy="12" r="2" fill="currentColor"/>
+                <circle cx="16" cy="8" r="2" fill="currentColor"/>
+                <circle cx="20" cy="16" r="2" fill="currentColor"/>
+                <circle cx="8" cy="6" r="2" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">散点图</span>
+              <span class="item-desc">XY坐标分布</span>
+            </div>
+          </div>
+          
+          <!-- 热力图 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'heatmap')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <rect x="2" y="2" width="6" height="6" fill="#5470c6"/>
+                <rect x="9" y="2" width="6" height="6" fill="#91cc75"/>
+                <rect x="16" y="2" width="6" height="6" fill="#fac858"/>
+                <rect x="2" y="9" width="6" height="6" fill="#fac858"/>
+                <rect x="9" y="9" width="6" height="6" fill="#5470c6"/>
+                <rect x="16" y="9" width="6" height="6" fill="#91cc75"/>
+                <rect x="2" y="16" width="6" height="6" fill="#91cc75"/>
+                <rect x="9" y="16" width="6" height="6" fill="#fac858"/>
+                <rect x="16" y="16" width="6" height="6" fill="#5470c6"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">热力图</span>
+              <span class="item-desc">颜色深浅表示</span>
+            </div>
+          </div>
+          
+          <!-- 仪表盘 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'gauge')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M12 2 A10 10 0 0 1 22 12" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="M12 2 A10 10 0 0 0 2 12" stroke="#ddd" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="3" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">仪表盘</span>
+              <span class="item-desc">百分比指标</span>
+            </div>
+          </div>
+          
+          <!-- K线图 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'candlestick')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <rect x="4" y="6" width="4" height="8" fill="#5470c6"/>
+                <rect x="4" y="14" width="4" height="4" fill="#5470c6"/>
+                <line x1="6" y1="4" x2="6" y2="8" stroke="#5470c6" stroke-width="1"/>
+                <line x1="6" y1="16" x2="6" y2="20" stroke="#5470c6" stroke-width="1"/>
+                <rect x="14" y="8" width="4" height="8" fill="#ee6666"/>
+                <rect x="14" y="10" width="4" height="4" fill="#ee6666"/>
+                <line x1="16" y1="6" x2="16" y2="10" stroke="#ee6666" stroke-width="1"/>
+                <line x1="16" y1="14" x2="16" y2="18" stroke="#ee6666" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">K线图</span>
+              <span class="item-desc">金融K线</span>
+            </div>
+          </div>
+          
+          <!-- 关系图 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'graph')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                <circle cx="5" cy="6" r="2" fill="currentColor"/>
+                <circle cx="19" cy="6" r="2" fill="currentColor"/>
+                <circle cx="5" cy="18" r="2" fill="currentColor"/>
+                <circle cx="19" cy="18" r="2" fill="currentColor"/>
+                <line x1="12" y1="9" x2="6" y2="7" stroke="currentColor" stroke-width="1"/>
+                <line x1="12" y1="9" x2="18" y2="7" stroke="currentColor" stroke-width="1"/>
+                <line x1="12" y1="15" x2="6" y2="17" stroke="currentColor" stroke-width="1"/>
+                <line x1="12" y1="15" x2="18" y2="17" stroke="currentColor" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">关系图</span>
+              <span class="item-desc">网络拓扑</span>
+            </div>
+          </div>
+          
+          <!-- 词云 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'wordcloud')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <text x="6" y="12" font-size="6" fill="#5470c6">词云</text>
+                <text x="10" y="16" font-size="4" fill="#91cc75">文字</text>
+                <text x="12" y="20" font-size="5" fill="#fac858">大小</text>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">词云</span>
+              <span class="item-desc">关键词云</span>
+            </div>
+          </div>
+          
+          <!-- 桑基图 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'sankey')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <rect x="2" y="4" width="4" height="6" fill="#5470c6"/>
+                <rect x="2" y="12" width="4" height="6" fill="#91cc75"/>
+                <rect x="2" y="20" width="4" height="2" fill="#fac858"/>
+                <rect x="18" y="6" width="4" height="10" fill="#5470c6"/>
+                <rect x="18" y="18" width="4" height="4" fill="#91cc75"/>
+                <path d="M6 7 C12 7 12 10 18 10" stroke="#5470c6" stroke-width="2" fill="none"/>
+                <path d="M6 15 C12 15 12 18 18 18" stroke="#91cc75" stroke-width="2" fill="none"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">桑基图</span>
+              <span class="item-desc">流量流向</span>
+            </div>
+          </div>
+          
+          <!-- 地图 -->
+          <div
+            class="component-item"
+            draggable="true"
+            @dragstart="handleDragStart($event, ComponentType.CHART, 'map')"
+            @click="$emit('select', ComponentType.CHART)"
+          >
+            <div class="item-icon chart-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M3 6 L9 2 L15 4 L21 2 L21 14 L15 18 L9 22 L3 18 Z" stroke="currentColor" stroke-width="1" fill="none"/>
+                <path d="M9 2 L9 22" stroke="#ddd" stroke-width="0.5"/>
+                <path d="M3 10 L21 10" stroke="#ddd" stroke-width="0.5"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <span class="item-name">地图</span>
+              <span class="item-desc">区域分布</span>
+            </div>
+          </div>
         </div>
       </div>
 
