@@ -41,6 +41,15 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/data-source',
+    name: 'DataSource',
+    component: () => import('@/views/DataSource/index.vue'),
+    meta: {
+      title: '数据源管理',
+      requiresAuth: true
+    }
+  },
+  {
     path: '/preview/:id',
     name: 'Preview',
     component: () => import('@/views/Preview/index.vue'),
