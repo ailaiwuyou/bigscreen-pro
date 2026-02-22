@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
+import { createServer } from 'http'
 
 import { errorHandler } from './middleware/errorHandler.js'
 import { notFound } from './middleware/notFound.js'
@@ -11,6 +12,7 @@ import authRoutes from './routes/auth.js'
 import dashboardRoutes from './routes/dashboard.js'
 import userRoutes from './routes/user.js'
 import dataSourceRoutes from './routes/dataSource.js'
+import { WebSocketService } from './services/websocketService.js'
 
 // 加载环境变量
 dotenv.config()
@@ -77,10 +79,23 @@ app.use(notFound)
 app.use(errorHandler)
 
 // 启动服务器 - 绑定到 0.0.0.0 以支持IPv4
-const server = app.listen(PORT, HOST, () => {
+const server = createServer(app)
+
+// 初始化 WebSocket 服务
+const wsService = new WebSocketService({
+  path: '/ws',
+  heartbeatInterval: 30000,
+  maxClients: 1000,
+  jwtSecret: process.env.JWT_SECRET || 'bigscreen-secret-key'
+})
+wsService.init(server)
+
+// 启动服务器
+server.listen(PORT, HOST, () => {
   console.log(`🚀 服务器运行在 ${NODE_ENV} 模式`)
   console.log(`📡 监听地址: http://${HOST}:${PORT}`)
   console.log(`🔗 健康检查: http://localhost:${PORT}/health`)
+  console.log(`📡 WebSocket: ws://${HOST}:${PORT}/ws`)
 })
 
 // 优雅关闭
