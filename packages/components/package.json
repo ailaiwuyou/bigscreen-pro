@@ -1,0 +1,28 @@
+{
+  "name": "@bigscreen/components",
+  "version": "1.0.0",
+  "description": "BigScreen Pro - UI Components Library",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "vue": "^3.4.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.5"
+  }
+}
